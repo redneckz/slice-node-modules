@@ -1,0 +1,46 @@
+{
+  "name": "@redneckz/slice-node-modules",
+  "version": "0.0.0",
+  "author": "Alexander Alexandrov",
+  "description": "Copy only needed modules before going to production (packaging of AWS Lambda, for example)",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "keywords": [
+    "lambda",
+    "packaging",
+    "node_modules",
+    "monorepo"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redneckz/slice-node-modules"
+  },
+  "bugs": {
+    "url": "https://github.com/redneckz/slice-node-modules/issues"
+  },
+  "homepage": "https://github.com/redneckz/slice-node-modules#readme",
+  "main": "index.js",
+  "bin": "cli.js",
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "devDependencies": {
+    "eslint": "~7.6.0",
+    "eslint-config-standard": "~14.1.1",
+    "eslint-plugin-import": "~2.22.0",
+    "eslint-plugin-node": "~11.1.0",
+    "eslint-plugin-promise": "~4.2.1",
+    "eslint-plugin-standard": "~4.0.1",
+    "jest-cli": "~26.2.2"
+  },
+  "scripts": {
+    "pretest": "npm run eslint",
+    "test": "jest",
+    "eslint": "eslint \"**/*.js\" --cache --cache-location \"./.cache\"",
+    "jest": "cross-env NODE_ENV=test jest",
+    "coveralls": "coveralls < coverage/lcov.info"
+  }
+}
