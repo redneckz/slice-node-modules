@@ -1,6 +1,6 @@
 {
   "name": "@redneckz/slice-node-modules",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Alexander Alexandrov",
   "description": "Copy only needed modules before going to production (packaging of AWS Lambda, for example)",
   "engines": {
