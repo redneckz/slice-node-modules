@@ -21,10 +21,10 @@
     "url": "https://github.com/redneckz/slice-node-modules/issues"
   },
   "homepage": "https://github.com/redneckz/slice-node-modules#readme",
-  "main": "index.js",
+  "main": "lib/index.js",
   "bin": "cli.js",
   "files": [
-    "index.js",
+    "lib",
     "cli.js"
   ],
   "devDependencies": {

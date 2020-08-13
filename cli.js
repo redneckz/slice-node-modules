@@ -2,7 +2,7 @@
 
 const { Readable } = require('stream');
 const { EOL } = require('os');
-const { findNodeModules, findUsedModules, toRelativeModulePath } = require('./index.js');
+const { findNodeModules, findUsedModules, toRelativeModulePath } = require('./lib/index.js');
 
 (async () => {
   try {
