@@ -2,16 +2,16 @@ const path = require('path');
 
 module.exports = findNodeModules;
 
-function findNodeModules ({ dev = false }) {
+const PACK_JSON_DEFAULT = path.join(process.cwd(), 'package.json');
+
+function findNodeModules ({ packJSON = PACK_JSON_DEFAULT, dev = false }) {
   const visited = new Set();
 
-  return listDependencies(path.join(process.cwd(), 'package.json'))
-    .map(moduleJSON => path.dirname(moduleJSON))
-    .map(modulePath => path.relative(process.cwd(), modulePath));
+  return listDependencies(packJSON);
 
   function listDependencies (packJSON) {
     const result = Object.keys(readDeps(packJSON, dev))
-      .map(resolveModule)
+      .map(resolveModule(packJSON))
       .filter(Boolean)
       .filter(modulePath => !visited.has(modulePath));
     result.forEach(modulePath => visited.add(modulePath));
@@ -28,13 +28,16 @@ function readDeps (packJSON, dev) {
   );
 }
 
-function resolveModule (id) {
-  try {
-    return require.resolve(
-      path.join(id, 'package.json'),
-      { paths: [process.cwd()] }
-    );
-  } catch (ex) {
-    // Can not resolve with defaults, so do nothing
-  }
+function resolveModule (packJSON) {
+  const packDir = path.dirname(packJSON);
+  return (moduleId) => {
+    try {
+      return require.resolve(
+        path.join(moduleId, 'package.json'),
+        { paths: [packDir] }
+      );
+    } catch (ex) {
+      // Can not resolve with defaults, so do nothing
+    }
+  };
 }
