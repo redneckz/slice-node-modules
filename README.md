@@ -1,6 +1,6 @@
 # slice-node-modules
 
-Copy only needed modules before going to production (packaging of AWS Lambda, for example)
+List only needed modules to package before going to production (packaging of AWS Lambda, for example)
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -13,9 +13,25 @@ Copy only needed modules before going to production (packaging of AWS Lambda, fo
 npm install --save-dev @redneckz/slice-node-modules
 ```
 
+or
+
+```shell
+npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]
+```
+
 ## How-to
 
-TODO
+To list all packages used by `some-package`:
+
+```shell
+$ npx @redneckz/slice-node-modules -e some-package/lib/index.js
+```
+
+or
+
+```shell
+$ npx @redneckz/slice-node-modules -p some-package/package.json
+```
 
 # License
 

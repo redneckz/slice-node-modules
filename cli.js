@@ -20,14 +20,14 @@ const { findNodeModules, findUsedModules, toRelativeModulePath } = require('./li
 })();
 
 function parseArgs (argv) {
-  if (argv.length < 3) throw new Error('Usage: slice-node-modules <dest> [--dev|-D]');
+  if (argv.length < 4) throw new Error('Usage: npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]');
 
-  const [,, dest, ...opts] = argv;
+  const [,, ...opts] = argv;
   const packJSON = opts.find((o, i) => (opts[i - 1] === '-p'));
   const entry = opts.find((o, i) => (opts[i - 1] === '-e'));
   const dev = opts.includes('--dev') || opts.includes('-D');
   const print0 = opts.includes('--print0') || opts.includes('-0');
-  return { packJSON, entry, dest, dev, print0 };
+  return { packJSON, entry, dev, print0 };
 }
 
 async function handleEntry (params) {
