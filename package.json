@@ -37,6 +37,7 @@
     "jest-cli": "~26.2.2"
   },
   "scripts": {
+    "build": "npm run test",
     "pretest": "npm run eslint",
     "test": "jest",
     "eslint": "eslint \"**/*.js\" --cache --cache-location \"./.cache\"",
