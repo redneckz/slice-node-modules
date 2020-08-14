@@ -1,6 +1,6 @@
 # slice-node-modules
 
-List only needed modules to package before going to production (packaging of AWS Lambda, for example)
+List only needed modules to package/archive/zip before going to production (packaging of AWS Lambda, for example)
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -13,24 +13,44 @@ List only needed modules to package before going to production (packaging of AWS
 npm install --save-dev @redneckz/slice-node-modules
 ```
 
-or
-
+Using npx:
 ```shell
 npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]
 ```
 
 ## How-to
 
-To list all packages used by `some-package`:
-
+List all packages used by `some-package`:
 ```shell
+$ # Parse dependencies from source files (-e stands for entry file)
 $ npx @redneckz/slice-node-modules -e some-package/lib/index.js
+$ # or from package.json
+$ npx @redneckz/slice-node-modules -p some-package/package.json
 ```
 
-or
-
+Including dev. dependencies:
 ```shell
-$ npx @redneckz/slice-node-modules -p some-package/package.json
+$ npx @redneckz/slice-node-modules -e some-package/lib/index.js --dev
+```
+
+Zero-separated (for `xargs`, for example):
+```shell
+$ npx @redneckz/slice-node-modules -e some-package/lib/index.js --print0
+```
+
+## AWS Lambda Packaging
+
+In case of monorepo (just for example):
+```shell
+$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js | zip -r some-lambda.zip -@
+```
+AWS Lambda config (CloudFormation):
+```ts
+const logLambda = new Function(this, 'some-lambda', {
+  code: new AssetCode('some-lambda.zip'),
+  handler: 'monorepo-root/packages/some-lambda/lib/index.handler',
+  runtime: Runtime.NODEJS_12_X
+});
 ```
 
 # License
