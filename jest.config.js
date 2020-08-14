@@ -3,7 +3,9 @@
 
 module.exports = {
   clearMocks: true,
+  collectCoverage: true,
   coverageDirectory: 'coverage',
+  coverageReporters: ['lcov'],
   coverageProvider: 'v8',
   testEnvironment: 'node'
 };

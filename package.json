@@ -28,6 +28,8 @@
     "cli.js"
   ],
   "devDependencies": {
+    "coveralls": "~3.1.0",
+    "cross-env": "~7.0.2",
     "eslint": "~7.6.0",
     "eslint-config-standard": "~14.1.1",
     "eslint-plugin-import": "~2.22.0",
@@ -40,7 +42,7 @@
     "prepublishOnly": "npm run build",
     "build": "npm run test",
     "pretest": "npm run eslint",
-    "test": "jest",
+    "test": "npm run jest && npm run coveralls",
     "eslint": "eslint \"**/*.js\" --cache --cache-location \"./.cache\"",
     "jest": "cross-env NODE_ENV=test jest",
     "coveralls": "coveralls < coverage/lcov.info"
