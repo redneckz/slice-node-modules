@@ -45,7 +45,7 @@
     "test": "npm run jest && npm run coveralls",
     "eslint": "eslint \"**/*.js\" --cache --cache-location \"./.cache\"",
     "jest": "cross-env NODE_ENV=test jest",
-    "coveralls": "coveralls < coverage/lcov.info"
+    "coveralls": "coveralls < coverage/lcov.info || true"
   },
   "dependencies": {
     "minimatch": "~3.0.4"
