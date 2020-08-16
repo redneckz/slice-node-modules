@@ -8,9 +8,9 @@ const { findNodeModules, findUsedModules, toRelativeModulePath } = require('./li
     const params = parseArgs(process.argv);
 
     const handler = params.entry ? handleEntry : handlePackJSON;
-    const foundModules = await handler(params);
+    const result = await handler(params);
 
-    const output = formatOutput(foundModules, params);
+    const output = formatOutput(result, params);
     Readable.from(output).pipe(process.stdout);
   } catch (ex) {
     console.error(ex.message, ex);
@@ -30,7 +30,10 @@ function parseArgs (argv) {
   const dev = opts.includes('--dev') || opts.includes('-D');
   const print0 = opts.includes('--print0') || opts.includes('-0');
 
-  return { packJSON, entry, dev, print0 };
+  const include = opts.find((o, i) => (opts[i - 1] === '--include'));
+  const exclude = opts.find((o, i) => (opts[i - 1] === '--exclude'));
+
+  return { packJSON, entry, dev, print0, include, exclude };
 
   function invalidArgs () {
     console.error('Usage: npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]');
@@ -49,9 +52,9 @@ async function handlePackJSON (params) {
   return findNodeModules(params);
 }
 
-async function * formatOutput (foundModules, { print0 }) {
+async function * formatOutput (result, { print0 }) {
   const sep = print0 ? String.fromCharCode(0) : '\n';
-  for await (const line of foundModules.map(toRelativeModulePath)) {
+  for await (const line of result.map(toRelativeModulePath)) {
     yield line;
     yield sep;
   }
