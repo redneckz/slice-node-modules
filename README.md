@@ -28,9 +28,14 @@ $ # or from package.json
 $ npx @redneckz/slice-node-modules -p some-package/package.json
 ```
 
-Including dev. dependencies:
+Dev. dependencies:
 ```shell
 $ npx @redneckz/slice-node-modules -e some-package/lib/index.js --dev
+```
+
+Filtering options --include/--exclude:
+```shell
+$ npx @redneckz/slice-node-modules -e some-package/lib/index.js --exclude 'aws-*'
 ```
 
 Zero-separated (for `xargs`, for example):
@@ -42,7 +47,8 @@ $ npx @redneckz/slice-node-modules -e some-package/lib/index.js --print0
 
 In case of monorepo (just for example):
 ```shell
-$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js | zip -r some-lambda.zip -@
+$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js \
+  | zip -r some-lambda.zip monorepo-root/packages/some-lambda/lib/ -@
 ```
 AWS Lambda config (CloudFormation):
 ```ts
