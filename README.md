@@ -15,7 +15,12 @@ npm install --save-dev @redneckz/slice-node-modules
 
 Using npx:
 ```shell
-npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]
+npx @redneckz/slice-node-modules \
+  [-e <source file>] [-p <package.json>] \
+  [--dev|-D] \
+  [--print0|-0] \
+  [--include <glob>] [--exclude <glob>] \
+  [--zip <zip file>]
 ```
 
 ## How-to
@@ -47,7 +52,10 @@ $ npx @redneckz/slice-node-modules -e some-package/lib/index.js --print0
 
 In case of monorepo (just for example):
 ```shell
-$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js --exclude 'aws-*' --zip some-lambda.zip
+$ npx @redneckz/slice-node-modules \
+  -e monorepo-root/packages/some-lambda/lib/index.js \
+  --exclude 'aws-*' \
+  --zip some-lambda.zip
 ```
 AWS Lambda config (CloudFormation):
 ```ts
