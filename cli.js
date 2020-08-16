@@ -1,14 +1,21 @@
 #!/usr/bin/env node
 
 const { Readable } = require('stream');
-const { findNodeModules, findUsedModules, toRelativeModulePath } = require('./lib/index.js');
+const {
+  findNodeModules,
+  findUsedModules,
+  toRelativeModulePath,
+  zip
+} = require('./lib/index.js');
 
 (async () => {
   try {
     const params = parseArgs(process.argv);
 
     const handler = params.entry ? handleEntry : handlePackJSON;
-    const result = await handler(params);
+    const result = (await handler(params))
+      .map(toRelativeModulePath);
+    if (params.zip) zip(result, params);
 
     const output = formatOutput(result, params);
     Readable.from(output).pipe(process.stdout);
@@ -22,21 +29,27 @@ function parseArgs (argv) {
   if (argv.length < 4) invalidArgs();
 
   const [,, ...opts] = argv;
-  const packJSON = opts.find((o, i) => (opts[i - 1] === '-p'));
-  const entry = opts.find((o, i) => (opts[i - 1] === '-e'));
+  const bool = (...keys) => keys.some(k => opts.includes(k));
+  const keyVal = (key) => opts.find((o, i) => (opts[i - 1] === key));
+
+  // Required
+  const packJSON = keyVal('-p');
+  const entry = keyVal('-e');
 
   if (!packJSON && !entry) invalidArgs();
 
-  const dev = opts.includes('--dev') || opts.includes('-D');
-  const print0 = opts.includes('--print0') || opts.includes('-0');
-
-  const include = opts.find((o, i) => (opts[i - 1] === '--include'));
-  const exclude = opts.find((o, i) => (opts[i - 1] === '--exclude'));
-
-  return { packJSON, entry, dev, print0, include, exclude };
+  return {
+    packJSON,
+    entry,
+    dev: bool('--dev', '-D'),
+    print0: bool('--print0', '-0'),
+    include: keyVal('--include'),
+    exclude: keyVal('--exclude'),
+    zip: keyVal('--zip')
+  };
 
   function invalidArgs () {
-    console.error('Usage: npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0]');
+    console.error('Usage: npx @redneckz/slice-node-modules [-e <source file>] [-p <package.json>] [--dev|-D] [--print0|-0] [--zip <zip file>]');
     process.exit(1);
   }
 }
@@ -54,7 +67,7 @@ async function handlePackJSON (params) {
 
 async function * formatOutput (result, { print0 }) {
   const sep = print0 ? String.fromCharCode(0) : '\n';
-  for await (const line of result.map(toRelativeModulePath)) {
+  for await (const line of result) {
     yield line;
     yield sep;
   }

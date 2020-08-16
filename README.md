@@ -47,8 +47,7 @@ $ npx @redneckz/slice-node-modules -e some-package/lib/index.js --print0
 
 In case of monorepo (just for example):
 ```shell
-$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js \
-  | zip -r some-lambda.zip monorepo-root/packages/some-lambda/lib/ -@
+$ npx @redneckz/slice-node-modules -e monorepo-root/packages/some-lambda/lib/index.js --exclude 'aws-*' --zip some-lambda.zip
 ```
 AWS Lambda config (CloudFormation):
 ```ts
