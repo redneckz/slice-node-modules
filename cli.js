@@ -2,6 +2,7 @@
 
 const { Readable } = require('stream');
 const {
+  dedupeList,
   findNodeModules,
   findUsedModules,
   toRelativeModulePath,
@@ -13,8 +14,9 @@ const {
     const params = parseArgs(process.argv);
 
     const handler = params.entry ? handleEntry : handlePackJSON;
-    const result = (await handler(params))
+    const rawResult = (await handler(params))
       .map(toRelativeModulePath);
+    const result = dedupeList(rawResult);
     if (params.zip) zip(result, params);
 
     const output = formatOutput(result, params);
